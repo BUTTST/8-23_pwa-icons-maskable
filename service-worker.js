@@ -1,14 +1,14 @@
 const CACHE_NAME = 'pwa-cache-v1';
 const urlsToCache = [
-    '/',
-    '/index.html',
-    '/manifest.json',
-    '/icons/算術應用_icon-48-maskable.png',
-    '/icons/算術應用_icon-72-maskable.png',
-    '/icons/算術應用_icon-96-maskable.png',
-    '/icons/算術應用_icon-144-maskable.png',
-    '/icons/算術應用_icon-192-maskable.png',
-    '/icons/算術應用_icon-512-maskable.png'
+    './',
+    './index.html',
+    './manifest.json',
+    './icons/算術應用_icon-48-maskable.png',
+    './icons/算術應用_icon-72-maskable.png',
+    './icons/算術應用_icon-96-maskable.png',
+    './icons/算術應用_icon-144-maskable.png',
+    './icons/算術應用_icon-192-maskable.png',
+    './icons/算術應用_icon-512-maskable.png'
 ];
 
 self.addEventListener('install', event => {
