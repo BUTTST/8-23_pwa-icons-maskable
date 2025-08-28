@@ -1,16 +1,16 @@
-const CACHE_NAME = 'subtitle-helper-v2';
+const CACHE_NAME = 'subtitle-helper-v3';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/app.js',
-  '/manifest.json',
-  '/icons/字幕稿-擷取工具_icon-48-maskable.png',
-  '/icons/字幕稿-擷取工具_icon-72-maskable.png',
-  '/icons/字幕稿-擷取工具_icon-96-maskable.png',
-  '/icons/字幕稿-擷取工具_icon-144-maskable.png',
-  '/icons/字幕稿-擷取工具_icon-192-maskable.png',
-  '/icons/字幕稿-擷取工具_icon-512-maskable.png'
+  './',
+  './index.html',
+  './style.css',
+  './app.js',
+  './manifest.json',
+  './icons/字幕稿-擷取工具_icon-48-maskable.png',
+  './icons/字幕稿-擷取工具_icon-72-maskable.png',
+  './icons/字幕稿-擷取工具_icon-96-maskable.png',
+  './icons/字幕稿-擷取工具_icon-144-maskable.png',
+  './icons/字幕稿-擷取工具_icon-192-maskable.png',
+  './icons/字幕稿-擷取工具_icon-512-maskable.png'
 ];
 
 // 安裝事件 - 緩存資源
