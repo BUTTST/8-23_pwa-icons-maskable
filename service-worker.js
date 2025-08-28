@@ -88,7 +88,7 @@ self.addEventListener('fetch', (event) => {
       .catch(() => {
         // 如果是導航請求且離線，返回主頁面
         if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
+          return caches.match('./index.html');
         }
       })
   );
@@ -135,8 +135,8 @@ self.addEventListener('push', (event) => {
   
   const options = {
     body: event.data ? event.data.text() : '您有新的內容可以查看',
-    icon: '/icons/字幕稿-擷取工具_icon-192-maskable.png',
-    badge: '/icons/字幕稿-擷取工具_icon-96-maskable.png',
+    icon: './icons/字幕稿-擷取工具_icon-192-maskable.png',
+    badge: './icons/字幕稿-擷取工具_icon-96-maskable.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -146,12 +146,12 @@ self.addEventListener('push', (event) => {
       {
         action: 'explore',
         title: '查看',
-        icon: '/icons/字幕稿-擷取工具_icon-48-maskable.png'
+        icon: './icons/字幕稿-擷取工具_icon-48-maskable.png'
       },
       {
         action: 'close',
         title: '關閉',
-        icon: '/icons/字幕稿-擷取工具_icon-48-maskable.png'
+        icon: './icons/字幕稿-擷取工具_icon-48-maskable.png'
       }
     ]
   };
@@ -168,7 +168,7 @@ self.addEventListener('notificationclick', (event) => {
 
   if (event.action === 'explore') {
     event.waitUntil(
-      clients.openWindow('/')
+      clients.openWindow('./')
     );
   }
 });
