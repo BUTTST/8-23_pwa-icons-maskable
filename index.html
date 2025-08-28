@@ -1,55 +1,70 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的 PWA 應用程式</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#317EFB"/>
-    <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        .container {
-            text-align: center;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #007bff;
-        }
-        p {
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>歡迎來到我的 PWA 應用程式！</h1>
-        <p>這是一個非常基礎的測試應用程式。</p>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>字幕稿助手</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#1e40af" />
+    <meta name="description" content="一個簡單易用的字幕稿管理工具，支援從分享面板直接添加連結" />
+    
+    <!-- PWA icons -->
+    <link rel="icon" type="image/png" sizes="48x48" href="icons/字幕稿-擷取工具_icon-48-maskable.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/字幕稿-擷取工具_icon-192-maskable.png" />
+  </head>
+  <body>
+    <header>
+      <h1>字幕稿助手</h1>
+      <div class="header-actions">
+        <button id="add-link-btn" class="primary-btn">新增連結</button>
+        <button id="install-btn" class="install-btn" style="display: none;">安裝應用</button>
+      </div>
+    </header>
 
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
-                    .then(registration => {
-                        console.log('Service Worker 註冊成功:', registration);
-                    })
-                    .catch(error => {
-                        console.error('Service Worker 註冊失敗:', error);
-                    });
-            });
-        }
-    </script>
-</body>
+    <main>
+      <div id="status" class="status">已載入 <span id="count">0</span> 個項目</div>
+      
+      <!-- 手動添加連結區域 -->
+      <section id="manual-add" class="manual-add" style="display: none;">
+        <div class="input-group">
+          <input type="text" id="url-input" placeholder="貼上 YouTube、TikTok 或抖音連結" />
+          <button id="add-btn">添加</button>
+          <button id="cancel-btn">取消</button>
+        </div>
+        <div id="add-status" class="status"></div>
+      </section>
+
+      <!-- 連結列表 -->
+      <section id="links" class="links"></section>
+      
+      <!-- 空狀態 -->
+      <section id="empty-state" class="empty-state" style="display: none;">
+        <div class="empty-icon">📝</div>
+        <h2>還沒有儲存任何連結</h2>
+        <p>使用分享功能將連結傳送到字幕稿助手，或點擊上方「新增連結」按鈕手動添加。</p>
+      </section>
+    </main>
+
+    <!-- 連結卡片模板 -->
+    <template id="link-template">
+      <article class="link-card">
+        <div class="link-thumbnail">
+          <img class="thumb-img" alt="縮圖" />
+        </div>
+        <div class="link-meta">
+          <a class="link-title" target="_blank" rel="noreferrer noopener"></a>
+          <div class="link-url"></div>
+          <div class="link-actions">
+            <button class="action-btn view-btn" type="button">檢視</button>
+            <button class="action-btn delete-btn" type="button">刪除</button>
+          </div>
+          <div class="link-time"></div>
+        </div>
+      </article>
+    </template>
+
+    <!-- Service Worker 註冊和主要腳本 -->
+    <script src="app.js"></script>
+  </body>
 </html>
