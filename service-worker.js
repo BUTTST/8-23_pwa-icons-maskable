@@ -1,4 +1,4 @@
-const CACHE_NAME = 'subtitle-helper-v4';
+const CACHE_NAME = 'subtitle-helper-v5';
 const urlsToCache = [
   './',
   './index.html',
@@ -110,7 +110,7 @@ async function handleShareTarget(request) {
     else if (text) params.append('text', text);
     if (title) params.append('title', title);
 
-    const redirectUrl = `/?${params.toString()}`;
+    const redirectUrl = `./?${params.toString()}`;
     
     console.log('重定向到:', redirectUrl);
 
@@ -118,7 +118,7 @@ async function handleShareTarget(request) {
     return Response.redirect(redirectUrl, 302);
   } catch (error) {
     console.error('處理分享目標時出錯:', error);
-    return Response.redirect('/', 302);
+    return Response.redirect('./', 302);
   }
 }
 
