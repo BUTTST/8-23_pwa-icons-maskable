@@ -1,4 +1,4 @@
-const CACHE_NAME = 'subtitle-helper-v1';
+const CACHE_NAME = 'subtitle-helper-v2';
 const urlsToCache = [
   '/',
   '/index.html',
