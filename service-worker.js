@@ -1,4 +1,4 @@
-const CACHE_NAME = 'subtitle-helper-v3';
+const CACHE_NAME = 'subtitle-helper-v4';
 const urlsToCache = [
   './',
   './index.html',
@@ -52,7 +52,7 @@ self.addEventListener('activate', (event) => {
 // 攔截網路請求
 self.addEventListener('fetch', (event) => {
   // 處理 Web Share Target API 請求
-  if (event.request.method === 'POST' && event.request.url.includes('/share-target/')) {
+  if (event.request.method === 'POST' && event.request.url.includes('share-target')) {
     event.respondWith(handleShareTarget(event.request));
     return;
   }
