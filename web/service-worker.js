@@ -1,16 +1,16 @@
-const CACHE_NAME = 'whisper-transcribe-v1';
+const CACHE_NAME = 'whisper-transcribe-v2';
 const urlsToCache = [
   './',
   './index.html',
   './styles.css',
   './scripts.js',
   './manifest.json',
-  '../icons/字幕稿-擷取工具_icon-48-maskable.png',
-  '../icons/字幕稿-擷取工具_icon-72-maskable.png',
-  '../icons/字幕稿-擷取工具_icon-96-maskable.png',
-  '../icons/字幕稿-擷取工具_icon-144-maskable.png',
-  '../icons/字幕稿-擷取工具_icon-192-maskable.png',
-  '../icons/字幕稿-擷取工具_icon-512-maskable.png'
+  './icons/字幕稿-擷取工具_icon-48-maskable.png',
+  './icons/字幕稿-擷取工具_icon-72-maskable.png',
+  './icons/字幕稿-擷取工具_icon-96-maskable.png',
+  './icons/字幕稿-擷取工具_icon-144-maskable.png',
+  './icons/字幕稿-擷取工具_icon-192-maskable.png',
+  './icons/字幕稿-擷取工具_icon-512-maskable.png'
 ];
 
 // 安裝事件 - 緩存資源
@@ -149,8 +149,8 @@ self.addEventListener('push', (event) => {
   
   const options = {
     body: event.data ? event.data.text() : '您有新的內容可以轉譯',
-    icon: '../icons/字幕稿-擷取工具_icon-192-maskable.png',
-    badge: '../icons/字幕稿-擷取工具_icon-96-maskable.png',
+    icon: './icons/字幕稿-擷取工具_icon-192-maskable.png',
+    badge: './icons/字幕稿-擷取工具_icon-96-maskable.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -160,12 +160,12 @@ self.addEventListener('push', (event) => {
       {
         action: 'open',
         title: '開啟轉譯',
-        icon: '../icons/字幕稿-擷取工具_icon-48-maskable.png'
+        icon: './icons/字幕稿-擷取工具_icon-48-maskable.png'
       },
       {
         action: 'close',
         title: '關閉',
-        icon: '../icons/字幕稿-擷取工具_icon-48-maskable.png'
+        icon: './icons/字幕稿-擷取工具_icon-48-maskable.png'
       }
     ]
   };

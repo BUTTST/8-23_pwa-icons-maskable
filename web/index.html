@@ -13,8 +13,8 @@
     <meta name="description" content="支援 YouTube、TikTok 網址或上傳音訊檔案的語音轉譯服務，可透過分享功能快速添加影片連結">
     
     <!-- PWA 圖標 -->
-    <link rel="icon" type="image/png" sizes="48x48" href="../icons/字幕稿-擷取工具_icon-48-maskable.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="../icons/字幕稿-擷取工具_icon-192-maskable.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="./icons/字幕稿-擷取工具_icon-48-maskable.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="./icons/字幕稿-擷取工具_icon-192-maskable.png">
     
     <!-- iOS PWA 支援 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -37,6 +37,9 @@
             <a href="#" class="btn btn-outline">
                 <i class="fas fa-key"></i> 設置API金鑰
             </a>
+            <button id="install-app-btn" class="btn btn-primary" style="display: none; margin-left: 10px;">
+                <i class="fas fa-download"></i> 安裝應用
+            </button>
         </div>
 
         <main>
@@ -237,6 +240,10 @@
     
     <!-- PWA Service Worker 註冊 -->
     <script>
+        // PWA 安裝提示相關變數
+        let deferredPrompt;
+        let installButton = null;
+
         // 註冊 Service Worker 支援快捷分享功能
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', async function() {
@@ -266,11 +273,68 @@
                             }
                         });
                     });
+
+                    // 初始化安裝按鈕
+                    installButton = document.getElementById('install-app-btn');
+                    if (installButton) {
+                        installButton.addEventListener('click', installPWA);
+                    }
                 } catch (error) {
                     console.error('Service Worker 註冊失敗:', error);
                 }
             });
         }
+
+        // 監聽 PWA 安裝提示事件
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('PWA 安裝提示事件觸發');
+            // 阻止 Chrome 67 和更早版本自動顯示安裝提示
+            e.preventDefault();
+            // 存儲事件以便後續使用
+            deferredPrompt = e;
+            // 顯示安裝按鈕
+            if (installButton) {
+                installButton.style.display = 'inline-block';
+            }
+        });
+
+        // PWA 安裝函數
+        async function installPWA() {
+            if (deferredPrompt) {
+                // 顯示安裝提示
+                deferredPrompt.prompt();
+                // 等待用戶回應提示
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`用戶選擇: ${outcome}`);
+                
+                if (outcome === 'accepted') {
+                    console.log('用戶接受安裝 PWA');
+                    // 隱藏安裝按鈕
+                    if (installButton) {
+                        installButton.style.display = 'none';
+                    }
+                } else {
+                    console.log('用戶拒絕安裝 PWA');
+                }
+                
+                // 清除 deferredPrompt，因為它只能使用一次
+                deferredPrompt = null;
+            } else {
+                // 如果沒有 deferredPrompt，可能是 iOS 或已安裝
+                alert('請使用瀏覽器的「加到主畫面」功能來安裝此應用！\n\nSafari: 分享按鈕 → 加到主畫面\nChrome: 選單 → 加到主畫面');
+            }
+        }
+
+        // 監聽應用安裝事件
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('PWA 安裝成功');
+            // 隱藏安裝按鈕
+            if (installButton) {
+                installButton.style.display = 'none';
+            }
+            // 可以在這裡添加安裝成功的通知
+            alert('🎉 Whisper 轉譯服務已成功安裝到您的設備！');
+        });
     </script>
     <script>
         // 检查是否有API金钥
