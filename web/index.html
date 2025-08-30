@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whisper 語音轉譯服務</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PWA 支援 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e40af">
+    <meta name="description" content="支援 YouTube、TikTok 網址或上傳音訊檔案的語音轉譯服務，可透過分享功能快速添加影片連結">
+    
+    <!-- PWA 圖標 -->
+    <link rel="icon" type="image/png" sizes="48x48" href="../icons/字幕稿-擷取工具_icon-48-maskable.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../icons/字幕稿-擷取工具_icon-192-maskable.png">
+    
+    <!-- iOS PWA 支援 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Whisper轉譯">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Whisper 語音轉譯服務</h1>
+            <p class="subtitle">支援 YouTube、YTshorts、TikTok 網址或上傳音訊檔案</p>
+        </header>
+
+        <div id="api-key-notice" style="display: none; background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 20px; border-radius: 5px;">
+            未檢測到API金鑰。某些功能可能無法正常工作。
+            <a href="admin.html" target="_blank">點擊這裡設置API金鑰</a>
+        </div>
+
+        <div class="api-settings-button">
+            <a href="#" class="btn btn-outline">
+                <i class="fas fa-key"></i> 設置API金鑰
+            </a>
+        </div>
+
+        <main>
+            <div class="app-container">
+                <!-- 左側：輸入區域 -->
+                <div class="input-section">
+                    <div class="form-group">
+                        <label for="link-input">影片網址</label>
+                        <input type="text" id="link-input" placeholder="例如：YouTube、TikTok 連結">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="upload-toggle">
+                            <span class="toggle-text">或上傳音訊檔案</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="upload-container hidden">
+                            <input type="file" id="file-input" accept="audio/*">
+                            <label for="file-input" class="file-label">
+                                <i class="fas fa-upload"></i>
+                                <span id="file-name">選擇檔案</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="model-select">選擇模型</label>
+                        <select id="model-select">
+                            <option value="turbo">turbo</option>
+                            <option value="large-v3-turbo" selected>large-v3-turbo</option>
+                            <option value="large">large</option>
+                            <option value="large-v1">large-v1</option>
+                            <option value="large-v2">large-v2</option>
+                            <option value="large-v3">large-v3</option>
+                            <option value="medium">medium</option>
+                            <option value="small">small</option>
+                            <option value="tiny">tiny</option>
+                            <option value="base">base</option>
+                            <option value="medium.en">medium.en</option>
+                            <option value="small.en">small.en</option>
+                            <option value="tiny.en">tiny.en</option>
+                            <option value="base.en">base.en</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="timestamp-checkbox">
+                        <label for="timestamp-checkbox">附帶時間碼</label>
+                        <span class="info-text">為轉譯結果添加時間戳記，方便定位音訊位置</span>
+                    </div>
+
+                    <button id="transcribe-button" class="primary-button">
+                        <i class="fas fa-play"></i> 執行轉譯
+                    </button>
+
+                    <button id="cc-button" class="secondary-button">
+                        <i class="fas fa-closed-captioning"></i> 抓取CC字幕
+                    </button>
+
+                    <div class="performance-info">
+                        <div class="info-item">
+                            <span class="info-label">總耗時 (秒)</span>
+                            <span id="total-time" class="info-value">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">總詞數</span>
+                            <span id="word-count" class="info-value">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右側：輸出區域 -->
+                <div class="output-section">
+                    <h2>輸出</h2>
+                    <div class="output-container">
+                        <textarea id="output-text" placeholder="顯示轉譯後的文本..." readonly></textarea>
+                    </div>
+
+                    <div class="performance-container">
+                        <h3>處理效率分析</h3>
+                        <div id="performance-box"></div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="copy-button" class="secondary-button" disabled>
+                            <i class="fas fa-copy"></i> 複製結果
+                        </button>
+                        
+                        <div class="download-buttons">
+                            <button id="txt-button" class="download-button" disabled>TXT 格式</button>
+                            <button id="srt-button" class="download-button" disabled>SRT 字幕</button>
+                            <button id="vtt-button" class="download-button" disabled>VTT 字幕</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="history-section card">
+            <h3>歷史紀錄</h3>
+            <div class="history-controls">
+                顯示最近
+                <select id="history-limit-select">
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="0">不限制</option>
+                </select>
+                筆
+                <button id="clear-all-history-btn" class="button">
+                    <span class="label">一鍵清除所有紀錄</span>
+                    <span class="hold-progress" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div id="history-list" class="history-list">
+                <!-- 歷史紀錄將在這裡動態加載 -->
+                <p>載入歷史紀錄中...</p>
+            </div>
+        </div>
+
+        <div id="loading-overlay" class="hidden">
+            <div class="spinner"></div>
+            <p>正在處理音訊，請稍候...</p>
+            <button id="cancel-button" class="secondary-button" style="margin-top: 16px;">
+                <i class="fas fa-times"></i> 取消轉譯
+            </button>
+        </div>
+
+        <div id="notification" class="hidden"></div>
+
+        <footer>
+            <div class="footer-content">
+                <h3>使用說明</h3>
+                <div class="instructions">
+                    <ol>
+                        <li>輸入影片網址或上傳音訊檔案 (兩者擇一)</li>
+                        <li>選擇適合的模型和轉譯選項</li>
+                        <li>點擊「執行轉譯」按鈕</li>
+                        <li>等待系統處理，轉譯結果將顯示在右側區域</li>
+                        <li>可使用複製按鈕或選擇下載格式來保存結果</li>
+                    </ol>
+                </div>
+                
+                <div class="support-info">
+                    <div class="info-block">
+                        <h4>支援格式</h4>
+                        <ul>
+                            <li>影片網址：YouTube、TikTok 等</li>
+                            <li>音訊檔案：mp3, wav, m4a, ogg 等常見音訊格式</li>
+                            <li>下載格式：TXT 純文字、SRT 字幕、VTT 網頁字幕</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-block">
+                        <h4>模型說明</h4>
+                        <ul>
+                            <li><strong>turbo/large-v3-turbo</strong>: 最新且高效能的模型，適合一般使用</li>
+                            <li><strong>large/medium/small/tiny/base</strong>: 各種尺寸的通用模型，可根據需求選擇</li>
+                            <li><strong>medium.en/small.en/tiny.en/base.en</strong>: 針對英文優化的模型，處理英文內容時更精確</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- API金鑰設置模態框 -->
+    <div id="api-key-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>設置API金鑰</h2>
+            <div class="form-group">
+                <label for="modal-api-key">API 金鑰</label>
+                <input type="text" id="modal-api-key" placeholder="輸入您的API金鑰，例如: rpa_XXXXXXXX">
+                <p class="note">請輸入您的 RunPod API 金鑰（格式：rpa_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX）</p>
+            </div>
+            <button id="modal-save-button" class="primary-button">
+                <i class="fas fa-save"></i> 保存設定
+            </button>
+            <div id="modal-status" class="success-message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- 在頁面底部添加測試按鈕（僅開發環境使用） -->
+    <div class="debug-panel" style="margin-top: 20px; padding: 10px; border: 1px dashed #ccc; display: none;">
+        <h3>除錯工具</h3>
+        <button id="test-api-btn" class="btn">測試API連接</button>
+        <button id="test-sample-btn" class="btn">使用樣本數據測試</button>
+        <div id="debug-output" style="margin-top: 10px; padding: 10px; background: #f5f5f5; max-height: 200px; overflow: auto;"></div>
+    </div>
+
+    <script>
+        // 若 config.js 不存在，提供最小化的後備避免報錯
+        window.API_CONFIG = window.API_CONFIG || { baseUrl: '/api/transcribe' };
+    </script>
+    <script src="config.js"></script>
+    <script src="scripts.js"></script>
+    
+    <!-- PWA Service Worker 註冊 -->
+    <script>
+        // 註冊 Service Worker 支援快捷分享功能
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async function() {
+                try {
+                    const registration = await navigator.serviceWorker.register('service-worker.js');
+                    console.log('Whisper Service Worker 註冊成功:', registration);
+                    
+                    // 檢查是否有新的 Service Worker 等待激活
+                    if (registration.waiting) {
+                        // 有新的 Service Worker 等待，提示用戶重新整理
+                        if (confirm('發現新版本！是否重新載入頁面以獲得最新功能？')) {
+                            registration.waiting.postMessage({type: 'SKIP_WAITING'});
+                            window.location.reload();
+                        }
+                    }
+                    
+                    // 監聽 Service Worker 更新
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // 有新的 Service Worker 安裝完成
+                                if (confirm('發現新版本！是否重新載入頁面以獲得最新功能？')) {
+                                    newWorker.postMessage({type: 'SKIP_WAITING'});
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    });
+                } catch (error) {
+                    console.error('Service Worker 註冊失敗:', error);
+                }
+            });
+        }
+    </script>
+    <script>
+        // 检查是否有API金钥
+        document.addEventListener('DOMContentLoaded', function() {
+            const hasApiKey = localStorage.getItem('temp_api_key');
+            if (!hasApiKey && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                document.getElementById('api-key-notice').style.display = 'block';
+                // 自動顯示模態框
+                document.getElementById('api-key-modal').style.display = 'block';
+            }
+            
+            // 模態框相關功能
+            const modal = document.getElementById('api-key-modal');
+            const closeButton = document.querySelector('.close-button');
+            const apiKeyButtons = document.querySelectorAll('.api-settings-button .btn');
+            const saveButton = document.getElementById('modal-save-button');
+            const apiKeyInput = document.getElementById('modal-api-key');
+            const statusMessage = document.getElementById('modal-status');
+            
+            // 載入已存儲的API金鑰
+            const savedKey = localStorage.getItem('temp_api_key');
+            if (savedKey) {
+                apiKeyInput.value = savedKey;
+            }
+            
+            // 點擊設置API金鑰按鈕打開模態框
+            apiKeyButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    modal.style.display = 'block';
+                });
+            });
+            
+            // 點擊關閉按鈕關閉模態框
+            closeButton.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // 點擊模態框外部關閉模態框
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // 保存API金鑰
+            saveButton.addEventListener('click', function() {
+                const apiKey = apiKeyInput.value.trim();
+                if (apiKey) {
+                    localStorage.setItem('temp_api_key', apiKey);
+                    statusMessage.textContent = 'API金鑰已保存！您現在可以開始使用轉錄服務。';
+                    statusMessage.style.display = 'block';
+                    
+                    // 隱藏API金鑰警告
+                    document.getElementById('api-key-notice').style.display = 'none';
+                    
+                    // 3秒後自動關閉模態框
+                    setTimeout(function() {
+                        modal.style.display = 'none';
+                    }, 3000);
+                } else {
+                    alert('請輸入有效的API金鑰');
+                }
+            });
+        });
+
+        // 開發環境下顯示除錯面板
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            document.querySelector('.debug-panel').style.display = 'block';
+            
+            // 測試API連接
+            document.getElementById('test-api-btn').addEventListener('click', async () => {
+                const debugOutput = document.getElementById('debug-output');
+                debugOutput.innerHTML = '測試API連接中...';
+                
+                try {
+                    const status = await testRunPodConnection();
+                    debugOutput.innerHTML = `API狀態: ${JSON.stringify(status, null, 2)}`;
+                } catch (e) {
+                    debugOutput.innerHTML = `測試失敗: ${e.message}`;
+                }
+            });
+            
+            // 使用樣本數據測試
+            document.getElementById('test-sample-btn').addEventListener('click', async () => {
+                const debugOutput = document.getElementById('debug-output');
+                debugOutput.innerHTML = '發送樣本數據...';
+                
+                // 使用短YouTube片段做測試
+                linkInput.value = 'https://www.youtube.com/shorts/JdUjciCnS6g';
+                modelSelect.value = 'tiny';  // 使用最小模型加快測試
+                
+                // 手動觸發轉錄按鈕
+                transcribeButton.click();
+            });
+        }
+    </script>
+</body>
+</html> 

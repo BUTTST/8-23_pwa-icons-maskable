@@ -1,0 +1,626 @@
+/* 基本樣式與通用設定 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #0f6e8c;
+    --primary-light: #2a9bc1;
+    --secondary-color: #5fbad5;
+    --accent-color: #f39c12;
+    --text-color: #333;
+    --light-text: #666;
+    --very-light-text: #999;
+    --background-color: #f5f7fa;
+    --card-background: #fff;
+    --border-color: #e1e5ea;
+    --success-color: #2ecc71;
+    --error-color: #e74c3c;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 頁首樣式 */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+header h1 {
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: var(--light-text);
+    font-size: 1.1rem;
+}
+
+/* 主要應用容器 */
+.app-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.input-section, .output-section {
+    flex: 1;
+    min-width: 300px;
+    background-color: var(--card-background);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+
+/* 輸入區域樣式 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.form-group input[type="text"],
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.form-group input[type="text"]:focus,
+.form-group select:focus {
+    border-color: var(--primary-light);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(15, 110, 140, 0.2);
+}
+
+/* 上傳區域樣式 */
+.upload-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    cursor: pointer;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.upload-toggle .toggle-text {
+    transition: var(--transition);
+}
+
+.upload-toggle:hover .toggle-text {
+    color: var(--primary-light);
+}
+
+.upload-container {
+    padding: 15px;
+    margin-top: 10px;
+    border: 2px dashed var(--border-color);
+    border-radius: 5px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.upload-container.hidden {
+    display: none;
+}
+
+#file-input {
+    display: none;
+}
+
+.file-label {
+    display: block;
+    padding: 12px;
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.file-label:hover {
+    background-color: var(--primary-light);
+}
+
+.file-label i {
+    margin-right: 8px;
+}
+
+/* 複選框樣式 */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.checkbox-group .info-text {
+    margin-left: 10px;
+    color: var(--very-light-text);
+    font-size: 0.9rem;
+}
+
+/* 按鈕樣式 */
+.primary-button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 20px;
+}
+
+.primary-button:hover {
+    background-color: var(--primary-light);
+}
+
+.primary-button i {
+    margin-right: 8px;
+}
+
+.secondary-button {
+    padding: 10px 20px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.secondary-button:hover {
+    background-color: var(--primary-light);
+}
+
+.secondary-button:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+.download-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.download-button {
+    padding: 10px 15px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.download-button:hover {
+    opacity: 0.9;
+}
+
+.download-button:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+/* 效能資訊樣式 */
+.performance-info {
+    background-color: var(--background-color);
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-item {
+    text-align: center;
+}
+
+.info-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--light-text);
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* 輸出區域樣式 */
+.output-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.output-container {
+    margin-bottom: 20px;
+}
+
+#output-text {
+    width: 100%;
+    height: 300px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
+.performance-container {
+    background-color: var(--background-color);
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.performance-container h3 {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+#performance-box {
+    color: var(--light-text);
+    line-height: 1.5;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 加載覆蓋層 */
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: white;
+}
+
+#loading-overlay.hidden {
+    display: none;
+}
+
+/* overlay 內的取消按鈕可見並位於中心下方 */
+#loading-overlay .secondary-button {
+    min-width: 180px;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid white;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 通知樣式 */
+#notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 25px;
+    border-radius: 5px;
+    background-color: var(--success-color);
+    color: white;
+    z-index: 900;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#notification.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* 頁尾樣式 */
+footer {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-content h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.instructions ol {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.support-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.info-block {
+    flex: 1;
+    min-width: 250px;
+}
+
+.info-block h4 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.info-block ul {
+    margin-left: 20px;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .download-buttons {
+        width: 100%;
+    }
+    
+    .download-button {
+        flex: 1;
+        text-align: center;
+    }
+    
+    .secondary-button {
+        width: 100%;
+    }
+}
+
+/* 添加到您的CSS文件 */
+.api-settings-button {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.api-settings-button .btn {
+    background-color: #2c3e50;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.api-settings-button .btn:hover {
+    background-color: #1abc9c;
+}
+
+/* 模態框樣式 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    background-color: #1e1e1e;
+    margin: 10% auto;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #0cc;
+}
+
+.success-message {
+    color: #0c0;
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+/* 新增：歷史紀錄樣式 */
+.history-section {
+    margin-top: 20px;
+    background-color: var(--card-background);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+
+.history-section h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.history-controls {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#history-limit-select {
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+#clear-all-history-btn {
+    background-color: var(--error-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+#clear-all-history-btn:hover {
+    opacity: 0.9;
+}
+
+/* 長按進度條：從左到右填滿，不顯示秒數 */
+#clear-all-history-btn .hold-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: rgba(255, 255, 255, 0.25);
+    pointer-events: none;
+    transition: width 0s; /* 由 JS 控制寬度，避免 CSS 動畫與重置打架 */
+}
+
+.history-list {
+    max-height: 400px; /* 限制高度，啟用滾動條 */
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 10px;
+    background-color: var(--background-color);
+}
+
+.history-record {
+    background-color: var(--card-background);
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.history-record p {
+    margin: 5px 0;
+    font-size: 0.9em;
+    color: var(--light-text);
+}
+
+.history-record strong {
+    color: var(--text-color);
+}
+
+.transcription-preview {
+    font-style: italic;
+    color: var(--very-light-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 80px); /* 留出操作按鈕空間 */
+}
+
+.history-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+}
+
+.history-actions button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: var(--transition);
+}
+
+.view-full-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.view-full-btn:hover {
+    background-color: var(--primary-light);
+}
+
+.delete-record-btn {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.delete-record-btn:hover {
+    background-color: #c82333;
+} 

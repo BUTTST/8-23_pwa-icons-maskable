@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>快捷分享功能測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-link {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            background-color: #1e40af;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .test-link:hover {
+            background-color: #1d4ed8;
+        }
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background-color: #f9fafb;
+        }
+        .note {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Whisper 快捷分享功能測試</h1>
+    
+    <div class="section">
+        <h2>測試說明</h2>
+        <p>此頁面用於測試快捷分享功能。點擊下方連結可以模擬從其他應用分享網址到 Whisper 轉譯服務的情況。</p>
+        <p><strong>預期行為：</strong>點擊測試連結後，應該會跳轉到 Whisper 頁面，並自動填寫網址到輸入框中。</p>
+    </div>
+
+    <div class="section">
+        <h2>YouTube 影片測試</h2>
+        <a href="./index.html?shared_url=https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="test-link">
+            測試 YouTube 完整網址
+        </a>
+        <div class="note">測試完整的 YouTube 影片網址</div>
+        
+        <a href="./index.html?shared_url=https://youtu.be/dQw4w9WgXcQ" class="test-link">
+            測試 YouTube 短網址
+        </a>
+        <div class="note">測試 YouTube 的短網址格式</div>
+        
+        <a href="./index.html?shared_url=https://www.youtube.com/shorts/abc123" class="test-link">
+            測試 YouTube Shorts
+        </a>
+        <div class="note">測試 YouTube Shorts 網址</div>
+    </div>
+
+    <div class="section">
+        <h2>TikTok 影片測試</h2>
+        <a href="./index.html?shared_url=https://www.tiktok.com/@user/video/1234567890" class="test-link">
+            測試 TikTok 影片
+        </a>
+        <div class="note">測試 TikTok 影片網址</div>
+    </div>
+
+    <div class="section">
+        <h2>包含標題的測試</h2>
+        <a href="./index.html?shared_url=https://www.youtube.com/watch?v=example&shared_title=測試影片標題" class="test-link">
+            測試包含標題的分享
+        </a>
+        <div class="note">測試同時包含網址和標題的分享情況</div>
+    </div>
+
+    <div class="section">
+        <h2>手動測試指引</h2>
+        <ol>
+            <li>點擊上方任意測試連結</li>
+            <li>檢查是否正確跳轉到 Whisper 頁面</li>
+            <li>確認網址已自動填寫到「影片網址」輸入框中</li>
+            <li>檢查是否顯示綠色提示訊息</li>
+            <li>確認輸入框有綠色高亮邊框（3秒後消失）</li>
+            <li>測試「執行轉譯」或「抓取CC字幕」功能是否正常</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>返回主頁面</h2>
+        <a href="./index.html" class="test-link">返回 Whisper 轉譯服務</a>
+    </div>
+
+    <script>
+        // 在控制台顯示當前頁面信息
+        console.log('快捷分享測試頁面已載入');
+        console.log('當前位置:', window.location.href);
+        
+        // 如果 PWA 已安裝，可以測試真實的分享功能
+        if (navigator.share) {
+            const realShareSection = document.createElement('div');
+            realShareSection.className = 'section';
+            realShareSection.innerHTML = `
+                <h2>真實分享 API 測試</h2>
+                <button id="share-test-btn" class="test-link" style="border: none; cursor: pointer;">
+                    測試真實分享功能
+                </button>
+                <div class="note">在支援的瀏覽器中測試原生分享 API</div>
+            `;
+            document.body.appendChild(realShareSection);
+            
+            document.getElementById('share-test-btn').addEventListener('click', async () => {
+                try {
+                    await navigator.share({
+                        title: '測試 YouTube 影片',
+                        text: '這是一個測試分享',
+                        url: 'https://www.youtube.com/watch?v=test123'
+                    });
+                } catch (err) {
+                    console.log('分享被取消或失敗:', err);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
